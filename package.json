@@ -1,0 +1,25 @@
+{
+  "name": "campus-activity-frontend",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "校园活动管理系统前端 - Vue3 + Vite5 + VueRouter4 + Pinia + Element Plus",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@element-plus/icons-vue": "^2.3.1",
+    "axios": "^1.6.8",
+    "element-plus": "^2.6.2",
+    "mockjs": "^1.1.0",
+    "pinia": "^2.3.1",
+    "vue": "^3.4.21",
+    "vue-router": "^4.3.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^5.0.4",
+    "vite": "^5.2.0"
+  }
+}
