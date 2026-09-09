@@ -1,89 +1,45 @@
 <template>
   <div class="student-container">
-    <h2>学生活动中心</h2>
-    <div class="activity-list">
-      <div v-for="item in activityList" :key="item.id" class="activity-item">
-        <h3>{{ item.title }}</h3>
-        <p>时间：{{ item.time }}</p>
-        <p>地点：{{ item.place }}</p>
-        <p>简介：{{ item.desc }}</p>
-        <p>名额：{{ item.signUpStudents.length }} / {{ item.maxNum }}</p>
-        <p>状态：{{ item.status }}</p>
-
-        <button v-if="!hasSignUp(item)" @click="handleSignUp(item)">报名活动</button>
-        <button v-else @click="handleCancelSignUp(item)">退选活动</button>
-      </div>
+    <h2>学生活动列表</h2>
+    <div v-for="act in activityStore.activityList" :key="act.id" class="act-item">
+      <h3>{{ act.title }}</h3>
+      <p>时间：{{ act.time }}</p>
+      <p>地点：{{ act.place }}</p>
+      <p>{{ act.desc }}</p>
+      <p>已报名人数：{{ act.signUpStudents.length }}/{{ act.maxNum }}</p>
+      <button @click="signUp(act)">报名活动</button>
     </div>
   </div>
 </template>
 
 <script setup>
-// TODO：后续对接后端，替换为接口获取活动列表
-import { ref } from 'vue'
-// 模拟活动数据，后面迁移到pinia
-const activityList = ref([
-  {
-    id: 1,
-    title: "校园读书分享会",
-    time: "2026-10-10",
-    place: "图书馆三楼报告厅",
-    desc: "读书交流活动，欢迎同学们参加",
-    maxNum: 50,
-    createTeacherId: 1001,
-    status: "报名中",
-    signUpStudents: []
-  },
-  {
-    id: 2,
-    title: "秋季运动会",
-    time: "2026-11-01",
-    place: "学校操场",
-    desc: "全校秋季田径运动会",
-    maxNum: 200,
-    createTeacherId: 1002,
-    status: "报名中",
-    signUpStudents: []
-  }
-])
-// 模拟当前登录学生id
-const currentStudentId = 2001
+import { useActivityStore } from '../stores/activity.js'
+const activityStore = useActivityStore()
 
-// 判断是否已经报名
-const hasSignUp = (act) => {
-  return act.signUpStudents.some(s => s.id === currentStudentId)
-}
-
-// 报名
-const handleSignUp = (act) => {
-  if(act.signUpStudents.length >= act.maxNum){
-    alert("名额已满！")
+// 报名函数，不要在顶层读取user.id，放到函数内部
+const signUp = (act) => {
+  // 加?. 安全读取，user不存在不会报错
+  const stuId = activityStore.user?.id
+  const stuName = activityStore.user?.name
+  if(!stuId){
+    alert("用户信息异常，请重新登录")
     return
   }
-  act.signUpStudents.push({id: currentStudentId, name:"测试学生"})
+  activityStore.signActivity(act, {id:stuId, name:stuName})
   alert("报名成功！")
-  // TODO：对接后端报名接口
-}
-
-// 退选
-const handleCancelSignUp = (act) => {
-  const idx = act.signUpStudents.findIndex(s => s.id === currentStudentId)
-  if(idx !== -1){
-    act.signUpStudents.splice(idx,1)
-    alert("退选成功！")
-    // TODO：对接后端退选接口
-  }
 }
 </script>
 
 <style scoped>
-.activity-item{
+.student-container{
+  padding:20px;
+}
+.act-item{
   border:1px solid #ccc;
-  padding:16px;
-  margin:10px 0;
-  border-radius:8px;
+  padding:10px;
+  margin:8px 0;
 }
 button{
-  margin-right:8px;
-  padding:4px 12px;
+  padding:4px 10px;
 }
 </style>

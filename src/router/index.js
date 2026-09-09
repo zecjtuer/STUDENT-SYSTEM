@@ -1,9 +1,12 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Home from '../views/Home.vue'
 import NotFound from '../views/404.vue'
-import Login from '../views/Login.vue'
+import Login from '../views/login.vue'
 import Student from '../views/Student.vue'
 import Teacher from '../views/Teacher.vue'
+
+
+
 
 const routes = [
   {
